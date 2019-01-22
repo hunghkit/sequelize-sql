@@ -2,7 +2,8 @@
 const co = require('co');
 const fs = require('fs');
 const path = require('path');
-const prompt = require('co-prompt');
+const sequelize = require('sequelize');
+const prompt = require('prompts');
 const program = require('commander');
 
 program.arguments('')
@@ -10,7 +11,11 @@ program.arguments('')
     co(function *() {
       function *sql () {
         try {
-          const query = yield prompt('sql>: ');
+          const { query } = yield prompt({
+            type: 'text',
+            name: 'query',
+            message: 'sql>:',
+          });
 
           if (query === 'exit') {
             process.exit(1);
@@ -28,7 +33,8 @@ program.arguments('')
             require(sequelizerc.extension);
           }
 
-          const [table, sqlPath] = query.split('.');
+          const [table, ...others] = query.split('.');
+          const sqlPath = others.join('.');
 
           if (query === 'config') {
             console.log(JSON.stringify(sequelizerc, null, 2));

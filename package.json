@@ -1,6 +1,6 @@
 {
   "name": "sequelize-sql",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "This's simple call sequelize function on your terminal",
   "main": "index.js",
   "scripts": {
@@ -28,8 +28,9 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "babel-register": "^6.26.0",
-    "co": "^4.6.0",
-    "co-prompt": "^1.0.0",
-    "commander": "^2.19.0"
+    "co": "4.6.0",
+    "commander": "2.19.0",
+    "prompts": "2.0.1",
+    "sequelize": "4.42.0"
   }
 }
