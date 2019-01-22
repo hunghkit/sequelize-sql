@@ -1,12 +1,12 @@
 # Sequelize sql commander
-The command is extention of `Sequelizejs`. It allows to call `Sequelize` functions from a terminal. 
+The command is extention of `Sequelizejs`. It allows to call `Sequelize` functions from a terminal.
 
 [![npm version](https://img.shields.io/npm/v/sequelize-sql.svg)](https://www.npmjs.com/package/sequelize-sql)
 [![npm downloads](https://img.shields.io/npm/dm/sequelize-sql.svg?maxAge=2592000)](https://www.npmjs.com/package/sequelize-sql)
 ![node](https://img.shields.io/node/v/sequelize-sql.svg)
 ![License](https://img.shields.io/npm/l/sequelize-sql.svg?maxAge=2592000?style=plastic)
 
-## v0.0.1 Beta Release
+## v1.0.0 Beta Release
 - Install globally:
 ```
 npm install -g sequelize-sql or yarn global add sequelize-sql
@@ -45,6 +45,8 @@ module.exports = {
 ## Documentation
 - If you installed as global just run `sequelize-sql`
 - If you installed as dependence just run `node_modules/.bin/sequelize-sql`
+- `Model` is call `models-path`
+- `sequelize` is required from `sequelize` lib
 
 ```bash
 [Model].[Sequelize Function]
@@ -53,7 +55,9 @@ Exmaple:
 -   Find something
     User.findAll({ limit: 10, order: [['createdAt', 'desc']] })
 -   Create something
-    Post.create({ title: 'Your title', content: 'Something in this' })
+    Post.create({ title: 'Your title', content: 'Something in this', authorId: 1 })
+-   Include model
+    Post.findAll({ include: [{ model: Model.User, as: 'author' }] })
 ```
 
 ## Resources

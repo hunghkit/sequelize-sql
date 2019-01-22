@@ -4,7 +4,8 @@
   "description": "This's simple call sequelize function on your terminal",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "say 'checking eslint' && eslint --ignore-path .gitignore index.js && say 'eslint clean'"
   },
   "engines": {
     "node": ">=6.0.0"
@@ -25,12 +26,20 @@
   "bin": {
     "sequelize-sql": "./index.js"
   },
+  "pre-commit": "eslint",
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
-    "babel-register": "^6.26.0",
+    "babel-eslint": "^10.0.1",
     "co": "4.6.0",
     "commander": "2.19.0",
     "prompts": "2.0.1",
     "sequelize": "4.42.0"
+  },
+  "devDependencies": {
+    "eslint": "5.10.0",
+    "eslint-config-airbnb": "17.1.0",
+    "eslint-plugin-import": "^2.15.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.12.4",
+    "pre-commit": "^1.2.2"
   }
 }

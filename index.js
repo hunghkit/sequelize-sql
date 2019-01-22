@@ -2,7 +2,7 @@
 const co = require('co');
 const fs = require('fs');
 const path = require('path');
-const sequelize = require('sequelize');
+const sequelize = require('sequelize'); // eslint-disable-line
 const prompt = require('prompts');
 const program = require('commander');
 
@@ -23,7 +23,7 @@ program.arguments('')
 
           const sequelizePath = path.join(process.cwd(), '.sequelizerc');
 
-          if (!fs.existsSync) {
+          if (!fs.existsSync(sequelizePath)) {
             return Promise.reject('Sequelizerc not found');
           }
 
@@ -48,9 +48,9 @@ program.arguments('')
               const sqlString = sqlPath.toString().replace(/;$/, '');
               const argsString = (sqlString.match(/\(.*\)/) || [])[0];
               const fun = sqlString.replace(argsString, '');
-              eval(`var args = ${argsString === '()' ? '{}' : argsString}`);
-              const a = yield Model[table][fun](args);
-              console.log(JSON.stringify(a, null, 2));
+              eval(`global.args = ${argsString === '()' ? '{}' : argsString}`);
+
+              console.log(JSON.stringify(yield Model[table][fun](global.args), null, 2));
             }
           } else {
             throw new Error('LOL: Please add a query');
