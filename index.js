@@ -2,21 +2,21 @@
 const co = require('co');
 const fs = require('fs');
 const path = require('path');
-const prompt = require('prompts');
 const program = require('commander');
+const readline = require('readline').createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
 program.arguments('')
   .action(() => {
     co(function *() {
       function *sql () {
         try {
-          const { query } = yield prompt({
-            type: 'text',
-            name: 'query',
-            message: 'sql',
-          });
+          const query = yield (new Promise((resolve) => readline.question('> ', (input) => resolve(input))));
 
           if (query === 'exit') {
+            readline.close();
             process.exit(1);
           }
 
@@ -52,7 +52,7 @@ program.arguments('')
             } else {
               const sqlString = sqlPath.toString().replace(/;$/, '');
               const argsString = (sqlString.match(/\(.*\)/) || [])[0] || '';
-              const fun = sqlString.replace(argsString, '');
+              const fun = sqlString.replace(argsString, '').trim();
               eval(`global.args = ${['()', ''].includes(argsString.replace(/\s/g, '')) ? '{}' : argsString};`);
 
               if (typeof $model[table][fun] !== 'function') {
@@ -66,7 +66,7 @@ program.arguments('')
 
           yield sql();
         } catch (e) {
-          console.log(e);
+          console.log('Error:', typeof e === 'string' ? e : e.message);
           yield sql();
         }
       }
@@ -74,10 +74,7 @@ program.arguments('')
       yield sql();
     })
     .catch((e) => {
-      if (e !== 'Exit') {
-        console.log('Error:', e);
-      }
-
+      console.log('Error:', typeof e === 'string' ? e : e.message);
       process.exit(1);
     });
   })

@@ -39,8 +39,7 @@
   "dependencies": {
     "babel-eslint": "^10.0.1",
     "co": "4.6.0",
-    "commander": "2.19.0",
-    "prompts": "2.0.1"
+    "commander": "2.19.0"
   },
   "devDependencies": {
     "eslint": "5.10.0",
