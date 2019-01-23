@@ -2,7 +2,6 @@
 const co = require('co');
 const fs = require('fs');
 const path = require('path');
-const sequelize = require('sequelize'); // eslint-disable-line
 const prompt = require('prompts');
 const program = require('commander');
 
@@ -14,7 +13,7 @@ program.arguments('')
           const { query } = yield prompt({
             type: 'text',
             name: 'query',
-            message: 'sql>:',
+            message: 'sql',
           });
 
           if (query === 'exit') {
@@ -28,9 +27,10 @@ program.arguments('')
           }
 
           const sequelizerc = require(sequelizePath);
+          const config = require(sequelizerc.config);
 
-          if (sequelizerc.extension) {
-            require(sequelizerc.extension);
+          if ((config || {}).extension) {
+            require(config.extension);
           }
 
           const [table, ...others] = query.split('.');
@@ -40,24 +40,33 @@ program.arguments('')
             console.log(JSON.stringify(sequelizerc, null, 2));
           } else if (table && sqlPath) {
             const modelPath = sequelizerc['models-path'];
-            const Model = require(modelPath);
 
-            if (!Model[table]) {
-              throw new Error('LOL: Table is not exist');
+            const $model = require(modelPath);
+            const $sequelize = $model.sequelize;
+            const $fn = $sequelize.fn; // eslint-disable-line
+            const $op = $sequelize.Op; // eslint-disable-line
+            const $literal = $sequelize.literal; // eslint-disable-line
+
+            if (!$model[table]) {
+              throw new Error(`LOL: ${table} is not exist`);
             } else {
               const sqlString = sqlPath.toString().replace(/;$/, '');
-              const argsString = (sqlString.match(/\(.*\)/) || [])[0];
+              const argsString = (sqlString.match(/\(.*\)/) || [])[0] || '';
               const fun = sqlString.replace(argsString, '');
-              eval(`global.args = ${argsString === '()' ? '{}' : argsString}`);
+              eval(`global.args = ${['()', ''].includes(argsString.replace(/\s/g, '')) ? '{}' : argsString};`);
 
-              console.log(JSON.stringify(yield Model[table][fun](global.args), null, 2));
+              if (typeof $model[table][fun] !== 'function') {
+                throw new Error(`LOL: ${table}.${fun} is not a function`);
+              } else {
+                console.log(JSON.stringify(yield $model[table][fun](global.args), null, 2));
+              }
+
             }
-          } else {
-            throw new Error('LOL: Please add a query');
           }
+
           yield sql();
         } catch (e) {
-          console.log('Error:', e);
+          console.log(e);
           yield sql();
         }
       }

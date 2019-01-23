@@ -1,6 +1,6 @@
 {
   "name": "sequelize-sql",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "This's simple call sequelize function on your terminal",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,15 @@
   "bugs": {
     "url": "https://github.com/hunghkit/sequelize-sql/issues"
   },
+  "keywords": [
+    "sql",
+    "mysql",
+    "sqlite",
+    "postgresql",
+    "commander",
+    "sequelize",
+    "nodejs"
+  ],
   "license": "MIT",
   "bin": {
     "sequelize-sql": "./index.js"
@@ -31,15 +40,14 @@
     "babel-eslint": "^10.0.1",
     "co": "4.6.0",
     "commander": "2.19.0",
-    "prompts": "2.0.1",
-    "sequelize": "4.42.0"
+    "prompts": "2.0.1"
   },
   "devDependencies": {
     "eslint": "5.10.0",
+    "eslint-plugin-react": "7.12.4",
     "eslint-config-airbnb": "17.1.0",
     "eslint-plugin-import": "^2.15.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-react": "^7.12.4",
     "pre-commit": "^1.2.2"
   }
 }

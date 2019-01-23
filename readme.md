@@ -2,7 +2,7 @@
 The command is extention of `Sequelizejs`. It allows to call `Sequelize` functions from a terminal.
 
 [![npm version](https://img.shields.io/npm/v/sequelize-sql.svg)](https://www.npmjs.com/package/sequelize-sql)
-[![npm downloads](https://img.shields.io/npm/dm/sequelize-sql.svg?maxAge=2592000)](https://www.npmjs.com/package/sequelize-sql)
+[![npm downloads](https://img.shields.io/npm/dm/sequelize-sql.svg)](https://www.npmjs.com/package/sequelize-sql)
 ![node](https://img.shields.io/node/v/sequelize-sql.svg)
 ![License](https://img.shields.io/npm/l/sequelize-sql.svg?maxAge=2592000?style=plastic)
 
@@ -18,17 +18,17 @@ npm install --save sequelize-sql or yarn add sequelize-sql
 ```
 
 ## Install Note
-- If you're using `module-alias` or custom prototype, you should add a file and put path file to `.sequelizerc`.
+- If you're using `module-alias` or custom prototype, you should add a file and put path file to config of `.sequelizerc`.
 
 
 ```
+// config content
 const path = require('path');
 
 module.exports = {
-  "config": '...',
-  "models-path": '...',
-  "seeders-path": '...',
-  "migrations-path": '...',
+  "test": '...',
+  "production": '...',
+  "development": '...',
   "extension": 'put it in here',
 };
 
@@ -45,8 +45,11 @@ module.exports = {
 ## Documentation
 - If you installed as global just run `sequelize-sql`
 - If you installed as dependence just run `node_modules/.bin/sequelize-sql`
-- `Model` is call `models-path`
-- `sequelize` is required from `sequelize` lib
+- `$model` - model as root
+- `$fn` - sequelize.fn
+- `$op` - sequelize.Op
+- `$literal` - sequelize.literal
+- `$sequelize` - sequelize as `sequelize` lib
 
 ```bash
 [Model].[Sequelize Function]
@@ -57,7 +60,17 @@ Exmaple:
 -   Create something
     Post.create({ title: 'Your title', content: 'Something in this', authorId: 1 })
 -   Include model
-    Post.findAll({ include: [{ model: Model.User, as: 'author' }] })
+    Post.findAll({ include: [{ model: $model.User, as: 'author' }] })
+-   Counting
+    Post.findAll({
+        group: ['authorId'],
+        attributes: ['authorId', [$literal('COUNT(authorId)'), 'total']]
+    })
+    or
+    Post.findAll({
+        group: ['authorId'],
+        attributes: ['authorId', [fn('COUNT', '*'), 'total']]
+    })
 ```
 
 ## Resources
