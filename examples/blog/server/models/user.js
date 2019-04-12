@@ -60,12 +60,6 @@ export default (sequelize, DataTypes) => {
     }
   });
 
-  User.updateData = (uuid, params = {}) => {
-    const permitParams = permitFields.reduce((obj, key) => [undefined, null].includes(params[key]) ? obj : ({ ...obj, [key]: params[key] }), {});
-
-    return User.create(permitParams);
-  };
-
   User.updateData = (uuid, params = {}) => new Promise((resolve, reject) => {
     try {
       User

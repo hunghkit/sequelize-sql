@@ -51,14 +51,15 @@ program.arguments('')
               throw new Error(`LOL: ${table} is not exist`);
             } else {
               const sqlString = sqlPath.toString().replace(/;$/, '');
-              const argsString = (sqlString.match(/\(.*\)/) || [])[0] || '';
-              const fun = sqlString.replace(argsString, '').trim();
-              eval(`global.args = ${['()', ''].includes(argsString.replace(/\s/g, '')) ? '{}' : argsString};`);
+              const paramsString = ((sqlString.match(/\(.*\)/) || [])[0] || '').trim();
+              const fun = sqlString.replace(paramsString, '').trim();
+              const argsString = paramsString.replace(/^\(/, "[").replace(/\)$/, "]")
+              eval(`global.args = ${['()', ''].includes(argsString.replace(/\s/g, '')) ? '[{}]' : argsString};`);
 
               if (typeof $model[table][fun] !== 'function') {
                 throw new Error(`LOL: ${table}.${fun} is not a function`);
               } else {
-                console.log(JSON.stringify(yield $model[table][fun](global.args), null, 2));
+                console.log(JSON.stringify(yield $model[table][fun](...global.args), null, 2));
               }
 
             }
@@ -66,7 +67,7 @@ program.arguments('')
 
           yield sql();
         } catch (e) {
-          console.log('Error:', typeof e === 'string' ? e : e.message);
+          console.log('Error:', JSON.stringify(typeof e === "object" && e.name === "Error" ? e.message : e, null, 2));
           yield sql();
         }
       }
@@ -74,7 +75,7 @@ program.arguments('')
       yield sql();
     })
     .catch((e) => {
-      console.log('Error:', typeof e === 'string' ? e : e.message);
+      console.log('Error:', JSON.stringify(typeof e === "object" && e.name === "Error" ? e.message : e, null, 2));
       process.exit(1);
     });
   })

@@ -6,12 +6,7 @@ The command is extention of `Sequelizejs`. It allows to call `Sequelize` functio
 ![node](https://img.shields.io/node/v/sequelize-sql.svg)
 ![License](https://img.shields.io/npm/l/sequelize-sql.svg?maxAge=2592000?style=plastic)
 
-## v0.0.5 Beta Release
-- Install globally:
-```
-npm install -g sequelize-sql or yarn global add sequelize-sql
-```
-
+## v0.0.6 Beta Release
 - Install in dependence
 ```
 npm install --save sequelize-sql or yarn add sequelize-sql
@@ -48,8 +43,7 @@ module.exports = {
 ```
 
 ## Documentation
-- If you installed as global just run `sequelize-sql`
-- If you installed as dependence just run `node_modules/.bin/sequelize-sql`
+- Run `node_modules/.bin/sequelize-sql`
 - `$model` - model as root
 - `$fn` - sequelize.fn
 - `$op` - sequelize.Op
